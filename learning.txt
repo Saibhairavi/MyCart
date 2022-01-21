@@ -1,0 +1,85 @@
+{"emmet.triggerExpansionOnTab":true,"files.associations":{"html":"html"},}
+
+{% load static%}
+<a href="{% static 'blog/mystatic.txt' %}">Click me</a>
+
+unable to show static file so in setting added / before static
+STATIC_URL = '/static/'         #'static/'
+
+
+cdn--content delivery netwok
+css file is coming from net
+
+todo---link in img
+
+AutoField that auto increments on every instance of that model is created by default when you run makemigrations on the project. It is a primary key to the table created for the model 
+
+components---nav bar
+crosel--->
+{%load static%}
+<img src='{% static "shop/sai.jpg" %}'
+
+image=models.ImageField(upload_to='path',default='')
+Cannot use ImageField because Pillow is not installed.
+"python -m pip install Pillow"
+
+adding default="" or default=0 in modell field
+include images with the help of media directories
+
+
+from django.utils import timezone
+timezone.now()
+dry principle:do not repeate urself
+template inheritance
+
+{% if forloop.counter|divisibleby:3 and forloop.counter > 0
+     and not forloop.last %}
+                </div> <div class="carousel-item">
+{% endif %}
+
+if we have list of list: in dict
+allproducts=[[products,range(1,nSlides),nSlides],
+                 [products,range(1,nSlides),nSlides]]
+    for product, x, nSlides in allproducts:
+        print(product)
+        print(x)
+        print(nSlides)
+
+category_wise=Product.obects.values('category','id')-->it will give queryset 
+as a list of all dicts as {'category': 'Shoes', 'id': 8},
+
+cntrl+shift+R----reload clear cache etc
+
+#working on add to cat button with the help of javascript
+   1)if we clic on that i will relaod the page 
+   2)session introduction
+   3)localtorage taks string of key val pair
+
+   for i in product|slice:"1:"
+   localStorage.removeItem("cart");
+   json script
+   span id to show the cart element by adding id to the span
+   and document.getElementById('cart')=Object.keys(cart).length
+
+
+   data-toggle="popover":used to make any website look more dynamic. 
+   opovers are generally used to display additional information about any element and are displayed on click of mouse pointer over that element
+
+   to activate id use #idname
+   to activate class use .classname
+
+
+
+   facebook comment plugin:
+ 
+   paytm paymnt integration
+   1)create a merchant accoiunt with paytm
+   2)merchant key and merchant id
+   3)csrf token -->to bypass csrf for paytm integration
+   4)user---item selection--checkout-->bill generate-->paytm url(send post request to paytm)
+   5)generate checksum to avoid mid violation nd fraud
+   
+
+
+   window.location='/shop'
+   

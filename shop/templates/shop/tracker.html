@@ -1,0 +1,131 @@
+{% extends 'shop/base.html' %}
+{% block title %} Track -- My Cart{% endblock %}
+{% block body %}
+<div class="container">
+    
+    <div class="col my-4">
+        <h2> My Cart Tracker - Track Your Order </h2>         
+<!--without loading the page how to submit a form-->
+        <form action="#" id="trackerForm" method="POST">
+            {% csrf_token %}
+            
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="name">Order ID</label>
+                    <input type="text" class="form-control" id="orderId" name="orderId" placeholder="orderId">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">Email</label>
+                    <input type="email" class="form-control" id="email" name='email' placeholder="Email">
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Track Order</button>
+        </form>
+    </div>
+    
+    
+    <div class="col my-4">
+        <h2>Your Order Status :</h2>
+        <div class="my-4">
+            <ul class="list-group" id='items' >
+                Enter your order Id and Email and click Track Order to find details about your order!
+            </ul>
+        </div>
+        <h2>Your Order Details :</h2>
+        <div class="my-4">
+            <ul class="list-group" id='ditems' >
+                Enter your order Id and Email and click Track Order to find details about your order!
+            </ul>
+        </div>
+       
+    </div>
+
+</div>
+{% endblock %}
+
+{% block js %}
+<script>    
+//target the form with the help of id=trackerForm using jquery
+$('#trackerForm').submit(function(event){
+    $('#items').empty();  //empty that list
+    var formdata = {
+        'orderId':$('input[name=orderId]').val(),
+        'email':$('input[name=email]').val(),
+        'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val()
+    }
+    //process the form
+    $.ajax({
+        type:'POST',
+        url:'/shop/tracker/',
+        data:formdata,
+        encode:true
+    })
+
+    .done(function(data){  
+        //this data is the data(json) which is sent by views.py
+        //js array response returned by tracker method of view
+
+        //data=
+        //[{"text": "The order has been placed", "time": "2022-01-11"}], 
+        //"{\"prd9\":[4,\"Jenes_boys\"],\"prd5\":[4,\"Samsung galaxy\"],\"prd12\":[2,\"watch\"],\"prd13\":[4,\"mixer\"],\"prd14\":[3,\"Premier Chic Wet Grinder 120W\"],\"prd15\":[4,\"washing machine\"],\"prd16\":[4,\"Iron\"],\"prd10\":[5,\"Wooden table\"],\"prd11\":[3,\"wada_maker\"]}"]
+        //to show order status--data[0]
+        //to show the order details---data[1]
+
+        //bug was there order details were repeting  in Your order details
+        //after clicking on track order button
+        $('#ditems').empty();
+
+        console.log(data)
+        data=JSON.parse(data);
+        
+        if (data['status']=="success")
+        {
+            updates=data['updates'];
+            for (i=0;i<updates.length;i++)
+            {
+                let text=updates[i]['text']
+                let time=updates[i]['time']
+                mystr=`<li class="list-group-item d-flex justify-content-between align-items-center">
+                    ${text}
+                    <span class="badge badge-primary badge-pill">${time}</span>
+                </li>`
+                $('#items').append(mystr)
+            }
+
+            console.log(data['ItemsJson'])
+            details=JSON.parse(data['ItemsJson']);
+        
+        for (item in details){
+            let name=details[item][1];
+            let qty=details[item][0];
+            
+            mystr=`<li class="list-group-item d-flex justify-content-between align-items-center">
+                ${name}
+                <span class="badge badge-primary badge-pill">${qty}</span>
+                
+            </li>`
+            $('#ditems').append(mystr);
+            } 
+        }
+        else
+        {
+            mystr=`<li class="list-group-item d-flex justify-content-between align-items-center">
+                Please check your email id and try again!! </li>`
+            $('#items').append(mystr)
+            $('#ditems').append(mystr); 
+
+
+        }
+        
+    });
+
+    event.preventDefault();
+    //this function prevent the default behaviour of page
+    //which is page loading --if we dont write this gun page will be loaded
+
+})    ;
+
+
+</script>
+{% endblock js %}
